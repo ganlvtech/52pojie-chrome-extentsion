@@ -5,6 +5,27 @@
 * 帖子左侧目录滚动
 * 帖子折叠
 
+## 开发
+
+### 安装依赖
+
+```bash
+npm install
+npm install webpack -g
+```
+
+### 开发实时监视代码改动
+
+```bash
+npm run watch
+```
+
+### 发布版本
+
+```bash
+npm run build
+```
+
 ## LICENSE
 
     52pojie.cn chrome extentsion
