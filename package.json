@@ -1,0 +1,20 @@
+{
+  "name": "52pojie_cn_chrome_extentsion",
+  "version": "1.0.0",
+  "description": "吾爱破解 Chrome 插件",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode=development",
+    "watch": "webpack --mode=development --watch",
+    "build": "webpack --mode=production"
+  },
+  "author": "Ganlv",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.5.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.10",
+    "zepto": "^1.2.0"
+  }
+}
