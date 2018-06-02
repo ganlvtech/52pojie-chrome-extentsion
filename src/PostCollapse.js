@@ -28,7 +28,7 @@ function needCollapse(el) {
         || $(el).find('.authi').get(0).textContent.indexOf('楼主') !== -1
         || $(el).find('.authicn.vm').get(0).src.indexOf('icn_lz') !== -1
         || $(el).find('.authicn.vm').get(0).src.indexOf('fanyiyin') !== -1
-        || $(el).find('.authicn.vm').get(0).src.indexOf('fanyiwen') !== -1) {
+        || $(el).find('.authicn.vm').get(0).src.indexOf('fanyinwen') !== -1) {
         return false;
     }
     return true;
@@ -43,10 +43,10 @@ function collapse(el) {
     // 隐藏签名
     $(el).find('.sign').closest('tr').hide();
     // 隐藏操作栏
-    $(el).find('.cmmnt').closest('em').hide();
-    $(el).find('.cmmnt').closest('.po')
+    $(el).find('.replyadd').closest('em').hide();
+    $(el).find('.replyadd').closest('.po')
         .css('border-top', 'none')
-        .css('margin-top', -$(el).find('.cmmnt').closest('.po').height());
+        .css('margin-top', -$(el).find('.replyadd').closest('.po').height());
     // 隐藏头像
     $(el).find('.pls.favatar .avatar').hide();
     // 用户信息栏缩小高度
@@ -60,8 +60,8 @@ function expand(el) {
     $(el).find('.t_fsz').closest('.plc').find('.pi').show();
     $(el).find('.t_fsz').closest('.plc').find('.pct').css('margin-top', '');
     $(el).find('.sign').closest('tr').show();
-    $(el).find('.cmmnt').closest('em').show();
-    $(el).find('.cmmnt').closest('.po')
+    $(el).find('.replyadd').closest('em').show();
+    $(el).find('.replyadd').closest('.po')
         .css('border-top', '')
         .css('margin-top', '');
     $(el).find('.pls.favatar .avatar').show();
