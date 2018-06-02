@@ -18,7 +18,7 @@ function getPlcHeight(el) {
 }
 
 function getPostCollapseHeight(el) {
-    return getPlcHeight($(el).find('.t_fsz').closest('.plc').get(0));
+    return getPlcHeight($(el).find('.t_f').closest('.plc').get(0));
 }
 
 function needCollapse(el) {
@@ -38,15 +38,15 @@ function collapse(el) {
     // 去除帖子最小高度
     $(el).find('.t_fsz').css('min-height', '0');
     // 隐藏时间
-    $(el).find('.t_fsz').closest('.plc').find('.pi').hide();
-    $(el).find('.t_fsz').closest('.plc').find('.pct').css('margin-top', $(el).find('.t_fsz').closest('.plc').find('.pi').css('margin-bottom'));
+    $(el).find('.t_f').closest('.plc').find('.pi').hide();
+    $(el).find('.t_f').closest('.plc').find('.pct').css('margin-top', $(el).find('.t_f').closest('.plc').find('.pi').css('margin-bottom'));
     // 隐藏签名
     $(el).find('.sign').closest('tr').hide();
     // 隐藏操作栏
-    $(el).find('.replyadd').closest('em').hide();
-    $(el).find('.replyadd').closest('.po')
+    $(el).find('.pob > em').hide();
+    $(el).find('.po')
         .css('border-top', 'none')
-        .css('margin-top', -$(el).find('.replyadd').closest('.po').height());
+        .css('margin-top', -$(el).find('.po').height());
     // 隐藏头像
     $(el).find('.pls.favatar .avatar').hide();
     // 用户信息栏缩小高度
@@ -57,11 +57,11 @@ function collapse(el) {
 
 function expand(el) {
     $(el).find('.t_fsz').css('min-height', '');
-    $(el).find('.t_fsz').closest('.plc').find('.pi').show();
-    $(el).find('.t_fsz').closest('.plc').find('.pct').css('margin-top', '');
+    $(el).find('.t_f').closest('.plc').find('.pi').show();
+    $(el).find('.t_f').closest('.plc').find('.pct').css('margin-top', '');
     $(el).find('.sign').closest('tr').show();
-    $(el).find('.replyadd').closest('em').show();
-    $(el).find('.replyadd').closest('.po')
+    $(el).find('.pob > em').show();
+    $(el).find('.po')
         .css('border-top', '')
         .css('margin-top', '');
     $(el).find('.pls.favatar .avatar').show();
