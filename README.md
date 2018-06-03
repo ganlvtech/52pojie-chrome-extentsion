@@ -20,11 +20,17 @@ npm install webpack -g
 npm run watch
 ```
 
+`build` 文件夹下是未打包成 `crx` 的版本，用于开发，请使用 `加载已解压的扩展程序`。
+
 ### 发布版本
+
+使用 Chrome 中的 `打包扩展程序` 之后，即可生成一个私钥，把私钥复制到项目根目录下 `key.pem`，然后执行
 
 ```bash
 npm run build
 ```
+
+即可在 `dist` 文件夹下生成对应版本号的 `crx` 文件。
 
 ## LICENSE
 
