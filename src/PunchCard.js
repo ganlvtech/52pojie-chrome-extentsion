@@ -3,7 +3,7 @@ const _ = require('lodash');
 function doPunchCard() {
     let div = document.createElement('div');
     div.style.display = 'none';
-    div.style.position = 'absolute';
+    div.style.position = 'fixed';
     div.style.top = '112px';
     div.style.right = '12px';
     div.style.width = '626px';
@@ -45,7 +45,7 @@ function doPunchCard() {
 
     document.body.appendChild(div);
 
-    iframe.src = 'https://www.52pojie.cn/home.php?mod=task&do=draw&id=2';
+    iframe.src = 'https://www.52pojie.cn/home.php?mod=task&do=apply&id=2';
 }
 
 function addHook() {

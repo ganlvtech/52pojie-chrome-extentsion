@@ -2,87 +2,104 @@ const _ = require('lodash');
 require('zepto/src/zepto');
 require('zepto/src/event');
 const $ = window.Zepto;
+const SpamDetector = require('./SpamDetector');
 
-function getPostList() {
+function Post(post) {
+    this.post = post;
+    this.$post = $(this.post);
+    this.$userinfo = this.$post.find('.pls.favatar');
+    this.$avatar = this.$userinfo.find('.avatar');
+    this.$authInfo = this.$post.find('.authi');
+    this.$authIcon = this.$post.find('.authicn');
+    this.$content = this.$post.find('.t_f');
+    this.$contentContainer = this.$post.find('.t_fsz');
+    this.$body = this.$post.find('.pcb');
+    this.$bodyContainer = this.$body.closest('.plc');
+    this.$postInfo = this.$bodyContainer.find('.pi');
+    this.$sign = this.$post.find('.sign');
+    this.$operation = this.$post.find('.po');
+    this.$operationLeft = this.$operation.find('.pob > em');
+    this.bodyText = this.$body.text().replace(/\s/g, '');
+    this.authInfoText = this.$authInfo.text();
+    this.authIconSrc = this.$authIcon.attr('src');
+    this.isSpam = SpamDetector.isSpam(this.bodyText);
+}
+
+Post.prototype.needCollapse = function () {
+    return !(this.$body.height() > 100
+        || this.bodyText.length > 40
+        || this.authInfoText.indexOf('自己') >= 0
+        || this.authInfoText.indexOf('楼主') >= 0
+        || this.authIconSrc.indexOf('icn_lz') >= 0
+        || this.authIconSrc.indexOf('fanyiyin') >= 0
+        || this.authIconSrc.indexOf('fanyinwen') >= 0);
+};
+
+Post.prototype.getBodyContainerHeight = function () {
+    let result = 0;
+    this.$bodyContainer.children().each(function () {
+        result += this.getBoundingClientRect().height;
+    });
+    return result;
+};
+
+Post.prototype.collapse = function () {
+    if (this.isSpam) {
+        this.$userinfo.css('opacity', '0.1');
+        this.$body.css('opacity', '0.1');
+    }
+    // 去除最小高度
+    this.$contentContainer.css('min-height', '0');
+    // 隐藏时间
+    this.$postInfo.css('padding', '0').height(0).css('border-bottom', 'none');
+    // 隐藏签名
+    this.$sign.hide();
+    // 隐藏操作栏
+    this.$operationLeft.hide();
+    this.$operation.css('border-top', 'none').css('margin-top', -this.$operation.height());
+    // 隐藏头像
+    this.$avatar.hide();
+    // 用户信息栏缩小高度
+    this.$userinfo.css('overflow', 'hidden').height(this.getBodyContainerHeight());
+};
+
+Post.prototype.expand = function () {
+    this.$userinfo.css('opacity', '');
+    this.$body.css('opacity', '');
+    this.$contentContainer.css('min-height', '');
+    this.$postInfo.css('padding', '').css('height', '').css('border-bottom', '');
+    this.$sign.show();
+    this.$operationLeft.show();
+    this.$operation.css('border-top', '').css('margin-top', '');
+    this.$avatar.show();
+    this.$userinfo.css('overflow', '').css('height', '');
+};
+
+function getPostELements() {
     return _.filter(document.querySelectorAll('#postlist > div'), function (el) {
         return /^post_\d+$/.test(el.id);
     });
 }
 
-function getPlcHeight(el) {
-    let result = 0;
-    _.each(el.children, function (el) {
-        result += el.getBoundingClientRect().height;
-    });
-    return result;
-}
-
-function getPostCollapseHeight(el) {
-    return getPlcHeight($(el).find('.t_f').closest('.plc').get(0));
-}
-
-function needCollapse(el) {
-    if ($(el).find('.pcb').height() > 100
-        || $(el).find('.t_f').textContent > 40
-        || $(el).find('.authi').get(0).textContent.indexOf('自己') !== -1
-        || $(el).find('.authi').get(0).textContent.indexOf('楼主') !== -1
-        || $(el).find('.authicn.vm').get(0).src.indexOf('icn_lz') !== -1
-        || $(el).find('.authicn.vm').get(0).src.indexOf('fanyiyin') !== -1
-        || $(el).find('.authicn.vm').get(0).src.indexOf('fanyinwen') !== -1) {
-        return false;
-    }
-    return true;
-}
-
-function collapse(el) {
-    // 去除帖子最小高度
-    $(el).find('.t_fsz').css('min-height', '0');
-    // 隐藏时间
-    $(el).find('.t_f').closest('.plc').find('.pi').hide();
-    $(el).find('.t_f').closest('.plc').find('.pct').css('margin-top', $(el).find('.t_f').closest('.plc').find('.pi').css('margin-bottom'));
-    // 隐藏签名
-    $(el).find('.sign').closest('tr').hide();
-    // 隐藏操作栏
-    $(el).find('.pob > em').hide();
-    $(el).find('.po')
-        .css('border-top', 'none')
-        .css('margin-top', -$(el).find('.po').height());
-    // 隐藏头像
-    $(el).find('.pls.favatar .avatar').hide();
-    // 用户信息栏缩小高度
-    $(el).find('.pls.favatar')
-        .css('overflow', 'hidden')
-        .height(getPostCollapseHeight(el));
-}
-
-function expand(el) {
-    $(el).find('.t_fsz').css('min-height', '');
-    $(el).find('.t_f').closest('.plc').find('.pi').show();
-    $(el).find('.t_f').closest('.plc').find('.pct').css('margin-top', '');
-    $(el).find('.sign').closest('tr').show();
-    $(el).find('.pob > em').show();
-    $(el).find('.po')
-        .css('border-top', '')
-        .css('margin-top', '');
-    $(el).find('.pls.favatar .avatar').show();
-    $(el).find('.pls.favatar')
-        .css('overflow', 'hidden')
-        .css('height', '');
-}
-
 function addHook() {
-    let postList = getPostList();
-    _.each(postList, function (el) {
-        if (needCollapse(el)) {
-            collapse(el);
-            $(el).on('click', function (e) {
-                expand(this);
-                var onMouseLeaveListener = function(e) {
-                    collapse(this);
-                    $(this).off('mouseleave', onMouseLeaveListener);
-                };
-                $(this).on('mouseleave', onMouseLeaveListener);
-            });
+    let posts = _.map(getPostELements(), function (post) {
+        return new Post(post);
+    });
+    _.each(posts, function (post) {
+        try {
+            if (post.needCollapse()) {
+                post.collapse();
+                post.$post.on('click', function (e) {
+                    post.expand();
+                    let onMouseLeaveListener = function (e) {
+                        post.collapse();
+                        $(this).off('mouseleave', onMouseLeaveListener);
+                    };
+                    $(this).on('mouseleave', onMouseLeaveListener);
+                });
+            }
+        } catch (e) {
+            console.log(e);
         }
     });
 }
