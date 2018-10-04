@@ -1,5 +1,5 @@
 {
-  "name": "52pojie_cn_chrome_extentsion",
+  "name": "52pojie-chrome-extentsion",
   "version": "1.2.0",
   "description": "吾爱破解 Chrome 插件",
   "main": "index.js",
@@ -12,13 +12,13 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
+    "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
-    "copy-webpack-plugin": "^4.5.1",
+    "copy-webpack-plugin": "^4.5.2",
     "crx-webpack-plugin": "^0.1.5"
   },
   "dependencies": {
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "zepto": "^1.2.0"
   }
 }
